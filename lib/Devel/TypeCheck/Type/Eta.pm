@@ -5,6 +5,7 @@ use Carp;
 
 use Devel::TypeCheck::Type;
 use Devel::TypeCheck::Util;
+use Devel::TypeCheck::Type::TRef;
 
 our @ISA = qw(Devel::TypeCheck::Type::TRef Devel::TypeCheck::Type);
 

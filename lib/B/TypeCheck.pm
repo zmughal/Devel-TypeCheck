@@ -1,4 +1,4 @@
-package B::Typecheck;
+package B::TypeCheck;
 
 use strict;
 use B;
@@ -259,7 +259,7 @@ sub rvConflate {
     my ($env, $ref, $XX) = @_;
 
     if (!defined($ref)){
-	confess("shit");
+	confess("ref not defined");
     }
 
     # If $ref is a VAR, unify $ref and RHO($XX), and be done with the
@@ -714,7 +714,17 @@ sub typeOp {
 	# Get the type of the referencing GV.  I don't fully
 	# understand the following line.  It was borrowed from
 	# B/Concise.pm.
-	my $gv = (($cv->PADLIST->ARRAY)[1]->ARRAY)[$op->padix];
+	my $class = B::class($op);
+
+	my $gv;
+	if ($class eq "PADOP") {
+	    $gv = (($cv->PADLIST->ARRAY)[1]->ARRAY)[$op->padix];
+	} elsif ($class eq "SVOP") {
+	    $gv = $op->gv;
+	} else {
+	    confess("unknown op type $class for GVSV");
+	}
+
 	my $tgv = $glob2type->get($gv->SAFENAME(), $env);
 	
 	# Project the type of the referent SV.  $tgv is guaranteed to
@@ -1029,8 +1039,13 @@ sub typeOp {
 	# references are true, and correspondingly zero, the empty
 	# string, and undef are false.  This precludes testing for
 	# empty aggregate data structures.
+
 	my ($ft, $fr) = typeOp($op->first, $pad2type, $env, $cv, SCALAR());
-	myUnify($env, $ft, $env->freshKappa());
+	
+	if (! ($ft->is(Devel::TypeCheck::Type::AV()) || $ft->is(Devel::TypeCheck::Type::HV()))) {
+	    myUnify($env, $ft, $env->freshKappa());
+	}
+
 	push(@rets, $fr) if (defined($fr));
 
 	# Remaining operands should unify together

@@ -1,6 +1,7 @@
 Changes
 MANIFEST
 Makefile.PL
+META.yml
 README
 
 lib/B/TypeCheck.pm
@@ -33,4 +34,17 @@ lib/Devel/TypeCheck/Util.pm
 t/00-load.t
 t/pod-coverage.t
 t/pod.t
-META.yml                                 Module meta-data (added by MakeMaker)
+
+t/pod.t
+t/pod-coverage.t
+t/00-load.t
+t/samples/gelem-good.pl
+t/samples/if-then-good.pl
+t/samples/in-out-branch-bad.pl
+t/samples/in-out-branch-good.pl
+t/samples/int-then-string-bad.pl
+t/samples/simple.pl
+t/samples/transitive-bad.pl
+t/samples/transitive-good.pl
+t/samples/unify-glob-bad.pl
+t/samples/unify-glob-good.pl
