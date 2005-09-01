@@ -1,15 +1,16 @@
 #!perl -T
 
-use Test::More tests => 24;
+use Test::More tests => 26;
 
 BEGIN {
     use_ok( 'Devel::TypeCheck' );
+    use_ok( 'B::TypeCheck' );
 
-    for my $helper ( qw ( Environment Glob2type Pad2type Sym2type Type Util ) ) {
+    for my $helper ( qw( Environment Glob2type Pad2type Sym2type Type Util ) ) {
         use_ok( "Devel::TypeCheck::$helper" );
     }
 
-    for my $type ( qw( Av Cv Dv Eta Hv Io Iv Kappa Mu Nu Pv Rho TRef TSub TTerm TVar Var ) ) {
+    for my $type ( qw( Chi Cv Dv Eta Io Iv Kappa Mu Nu Omicron Pv Rho TRef TSub TTerm TVar Upsilon Var ) ) {
         use_ok( "Devel::TypeCheck::Type::$type" );
     }
 }

@@ -1,4 +1,4 @@
-package Devel::TypeCheck::Type::Kappa;
+package Devel::TypeCheck::Type::Upsilon;
 
 use strict;
 use Carp;
@@ -10,17 +10,19 @@ use Devel::TypeCheck::Util;
 
 =head1 NAME
 
-Devel::TypeCheck::Type::Kappa - Type representing scalar values.
+Devel::TypeCheck::Type::Upsilon - Type representing printable values.
 
 =head1 SYNOPSIS
 
- use Devel::TypeCheck::Type::Kappa;
+ use Devel::TypeCheck::Type::Upsilon;
 
 =head1 DESCRIPTION
 
-Kappa represents scalar values.  The underlying subtype can be a
-variable, to represent a generic scalar, or an Upsilon or Rho type to
-represent a "printable" type and a reference, respectively.
+Upsilon represents printable values.  A "printable value" is a string
+or an integer.  This serves to represent scalar values where a human
+readable type is desired, or where information about references are
+lost (for instance, as a key in a hash).  Underlying subtypes can be
+numbers (Nu), strings (PV), or type variables to represent ambiguity.
 
 Inherits from Devel::TypeCheck::Type::TSub and Devel::TypeCheck::Type::TVar.
 
@@ -33,7 +35,7 @@ our @SUBTYPES;
 our @subtypes;
 
 BEGIN {
-    @SUBTYPES = (Devel::TypeCheck::Type::P(), Devel::TypeCheck::Type::Y(), Devel::TypeCheck::Type::VAR());
+    @SUBTYPES = (Devel::TypeCheck::Type::N(), Devel::TypeCheck::Type::PV(), Devel::TypeCheck::Type::VAR());
 
     for my $i (@SUBTYPES) {
 	$subtypes[$i] = 1;
@@ -46,12 +48,7 @@ sub hasSubtype {
 }
 
 sub type {
-    return Devel::TypeCheck::Type::K();
-}
-
-sub deref {
-    my ($this) = @_;
-    return $this->subtype->deref;
+    return Devel::TypeCheck::Type::Y();
 }
 
 TRUE;
