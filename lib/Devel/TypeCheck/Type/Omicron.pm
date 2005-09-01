@@ -89,6 +89,8 @@ sub derefIndex {
     if ($this->homogeneous) {
 	return $this->derefHomogeneous;
     } else {
+	confess("index is negative") if ($index < 0);
+
 	if (!exists($this->ary->[$index])) {
 	    $this->ary->[$index] = $env->freshKappa();
 	}

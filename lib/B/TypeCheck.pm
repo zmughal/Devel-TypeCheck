@@ -213,7 +213,7 @@ sub smash {
 	foreach my $i (@results) {
 	    my $oldresult = $result;
 	    $result = $result->append($i, $env);
-	    die("failure to unify " . myPrint($i, $env) . " with " . myPrint($oldresult, $env)) if (!defined($result));
+	    die("TYPE ERROR: failure to unify " . myPrint($i, $env) . " with " . myPrint($oldresult, $env)) if (!defined($result));
 	}
     }
 
@@ -404,8 +404,16 @@ sub rvConflate {
 	    return($XX);
 	}
 
+    } elsif ($ref->is(Devel::TypeCheck::Type::K()) &&
+	     $ref->is(Devel::TypeCheck::Type::VAR())) {
+
+	# Garbage garbage garbage
+	myUnify($env, $ref, $env->genRho($env->freshKappa));
+	goto RVC_ISRHO;
+
     # If it's a reference
     } elsif ($ref->is(Devel::TypeCheck::Type::P())) {
+      RVC_ISRHO:
 	$ref = $ref->deref;
 
 	# Stupid hack alert: these operators do the same thing if $ref
@@ -607,7 +615,11 @@ sub typeOp {
     } elsif ($t == OP_LEAVETRY()) {
 
 	my ($t, $r) = typeOpChildren($op, $pad2type, $env, $cv, $context);
-	($realResult, $realReturn) = (myUnify($env, $t, $r), undef);
+	if (!$r) {
+	    ($realResult, $realReturn) = ($t, undef);
+	} else {
+	    ($realResult, $realReturn) = (myUnify($env, $t, $r), undef);
+	}
 
     } elsif ($t == OP_ENTERSUB()) {
 
@@ -634,10 +646,8 @@ sub typeOp {
 
 	# The second operand is the list
 	my ($t, $r) = typeOp($op->first->sibling, $pad2type, $env, $cv, LIST());
-	# Use the null argument version of getOmicron to get a fresh
-	# array type variable that should unify with any valid result
-	# of the immediately previous typeOp().
-	myUnify($env, $t, $env->getOmicron());
+	# Prmoote $t to a homogeneous list
+	myUnify($env, $t, $env->genOmicron($env->freshKappa));
 
 	# If the third argument is there, then it's a glob reference
 	# to the variable that we're iterating over.
@@ -645,12 +655,14 @@ sub typeOp {
 	if ($targ) {
 	    # No third argument, iterator is a lexically scoped variable
 	    my $pad = $pad2type->get($targ, $env);
-	    myUnify($env, $pad, $env->freshKappa);
+	    myUnify($env, $pad, $t->derefHomogeneous);
 	} else {
-	    ($t, $r) = typeOp($op->first->sibling->sibling, $pad2type, $env, $cv, SCALAR());
+	    my ($t0, $r0) = typeOp($op->first->sibling->sibling, $pad2type, $env, $cv, SCALAR());
 
-	    myUnify($env, $t, $env->freshEta);
+	    myUnify($env, $t0, $t->derefHomogeneous);
 	}
+
+	($realResult, $realReturn) = ($t->derefHomogeneous, undef);
 
     } elsif ($t == OP_ITER()) {
 	
@@ -1054,6 +1066,11 @@ sub typeOp {
 	    $ary = $tgv->derefOmicron();
 	}
 
+	# Negative index indicates a homogeneous array.
+	if ($elt < 0) {
+	    myUnify($env, $ary, $env->genOmicron($env->freshKappa));
+	}
+
 	($realResult, $realReturn) = ($ary->derefIndex($elt, $env), undef);
     
     } elsif ($t == OP_AELEM()) {
@@ -1076,6 +1093,15 @@ sub typeOp {
 	    if ($list->homogeneous) {
 		$t = $list->derefHomogeneous;
 	    } else {
+		my $const = getIvConst($op->last, $cv);
+
+		# Negative index indicates a homogeneous array, since
+		# we don't know where the end of the tuple is until
+		# the type has been completely determined.
+		if ($const < 0) {
+		    myUnify($env, $list, $env->genOmicron($env->freshKappa));
+		}
+
 		$t = $list->derefIndex(getIvConst($op->last, $cv), $env);
 	    }
 

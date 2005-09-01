@@ -35,12 +35,10 @@ lib/_h2ph_pre.ph
 lib/opnames.ph
 
 t/00-load.t
-t/pod-coverage.t
 t/pod.t
+t/pod-coverage.t
+t/run-samples.t
 
-t/pod.t
-t/pod-coverage.t
-t/00-load.t
 t/samples/gelem-good.pl
 t/samples/if-then-good.pl
 t/samples/in-out-branch-bad.pl
