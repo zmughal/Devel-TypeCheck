@@ -49,12 +49,12 @@ sub setVerbose ($) {
 
 =item B<verbose>($msg1, $msg2, ...)
 
-If verbosity is on, print out the messages to STDERR.  Otherwise, do nothing.
+If verbosity is on, print out the messages to STDOUT.  Otherwise, do nothing.
 
 =cut
 sub verbose {
     if ($verbose) {
-        print STDERR (@_, "\n");
+        print STDOUT (@_, "\n");
     }
 }
 
@@ -65,7 +65,7 @@ Like verbose(), but without a carriage return.
 =cut
 sub verbose_ {
     if ($verbose) {
-	print STDERR (@_);
+	print STDOUT (@_);
     }
 }
 

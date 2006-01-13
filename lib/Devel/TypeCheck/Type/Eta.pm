@@ -27,32 +27,40 @@ our @ISA = qw(Devel::TypeCheck::Type);
 # **** INSTANCE ****
 
 sub new {
-    my ($name, $kappa, $omicron, $chi) = @_;
+    my ($name, $kappa, $omicron, $chi, $zeta) = @_;
 
     if ($kappa->type != Devel::TypeCheck::Type::M() &&
-        $kappa->type->subtype->type != Devel::TypeCheck::Type::K()) {
+        $kappa->subtype->type != Devel::TypeCheck::Type::K()) {
 	carp("Impossible included type ", $kappa->type, " for scalar (kappa) part of Eta\n");
     }
 
     if (defined($omicron) && $omicron->type != Devel::TypeCheck::Type::M() &&
-        $omicron->type->subtype->type != Devel::TypeCheck::Type::O()) {
+        $omicron->subtype->type != Devel::TypeCheck::Type::O()) {
 	carp("Impossible included type ", $omicron->type, " for array (omicron) part of Eta\n");
     }
 
     if (defined($chi) && $chi->type != Devel::TypeCheck::Type::M() &&
-        $chi->type->subtype->type != Devel::TypeCheck::Type::X()) {
+        $chi->subtype->type != Devel::TypeCheck::Type::X()) {
 	carp("Impossible included type ", $chi->type, " for hash (chi) part of Eta\n");
+    }
+
+    if (defined($zeta) && $zeta->type != Devel::TypeCheck::Type::M() &&
+	$zeta->subtype->type != Devel::TypeCheck::Type::Z()) {
+	carp("Impossible included type ", $zeta->type, " for CV (zeta) part of Eta\n");
     }
 
     my $this = {};
 
-    $this->{'K'} = $kappa;   $this->{'SV'} = TRUE;
-    $this->{'O'} = $omicron; $this->{'AV'} = TRUE;
-    $this->{'X'} = $chi;     $this->{'HV'} = TRUE;
+    bless($this, $name);
+
+    $this->{'K'} = $kappa;   $this->setSV;
+    $this->{'O'} = $omicron; $this->setAV;
+    $this->{'X'} = $chi;     $this->setHV;
+    $this->{'Z'} = $zeta;    $this->setCV;
 
     $this->{'subtype'} = undef;
 
-    return bless($this, $name);
+    return $this;
 }
 
 sub type {
@@ -64,7 +72,7 @@ sub str {
 
     my @str;
     
-    for my $i ('CV', 'IO') {
+    for my $i ('IO') {
 	if ($this->_getGeneric($i)) {
 	    push(@str, "<$i>");
 	}
@@ -78,7 +86,7 @@ sub str {
 	$str = "...";
     }
 
-    return ("H:$str;" . $this->derefKappa->str($env) . ";" . $this->derefOmicron->str($env) . ";" . $this->derefChi->str($env));
+    return ("H:$str;" . $this->derefKappa->str($env) . ";" . $this->derefOmicron->str($env) . ";" . $this->derefChi->str($env) . ";" . $this->derefZeta->str($env));
 }
 
 sub derefKappa {
@@ -94,6 +102,11 @@ sub derefOmicron {
 sub derefChi {
     my ($this) = @_;
     return $this->{'X'};
+}
+
+sub derefZeta {
+    my ($this) = @_;
+    return $this->{'Z'};
 }
 
 sub deref {
@@ -181,10 +194,6 @@ sub pretty {
     my ($this, $env) = @_;
     my @str;
     
-    if ($this->_getGeneric('CV')) {
-	push (@str, "CODE");
-    }
-
     if ($this->_getGeneric('IO')) {
 	push (@str, "IO HANDLE");
     }
@@ -197,7 +206,12 @@ sub pretty {
 	$str = "...";
     }
 
-    return ("GLOB of ($str; " . $this->derefKappa->pretty($env) . "; " . $this->derefOmicron->pretty($env) . "; " . $this->derefChi->pretty($env) . ")");
+    return ("GLOB of ($str; " .
+	    $this->derefKappa->pretty($env) . "; " .
+	    $this->derefOmicron->pretty($env) . "; " .
+	    $this->derefChi->pretty($env) . "; " .
+	    $this->derefZeta->pretty($env) .
+	    ")");
 }
 
 TRUE;

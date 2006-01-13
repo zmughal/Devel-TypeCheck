@@ -3,6 +3,7 @@ package Devel::TypeCheck::Pad2type;
 use strict;
 use Devel::TypeCheck::Type;
 use Devel::TypeCheck::Sym2type;
+use Devel::TypeCheck::Util;
 use B;
 use IO::Handle;
 

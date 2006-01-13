@@ -313,7 +313,7 @@ sub append {
 		$ret = undef;
 	    }
 	} elsif ($that->is(Devel::TypeCheck::Type::K()) ||
-		 $that->is(Devel::TypeCheck::Type::CV())) {
+		 $that->is(Devel::TypeCheck::Type::Z())) {
 	    $ret = $env->unify($env->genOmicron($that), $root);
 	} else {
 	    confess("Unknown type in append");
@@ -339,7 +339,7 @@ sub append {
 		$ret = undef;
 	    }
 	} elsif ($that->is(Devel::TypeCheck::Type::K()) ||
-		 $that->is(Devel::TypeCheck::Type::CV())) {
+		 $that->is(Devel::TypeCheck::Type::Z())) {
 	    $ret = $env->genOmicronTuple((@{$this->ary}, $that));
 	} else {
 	    confess("Unknown type in append");

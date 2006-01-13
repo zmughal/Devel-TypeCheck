@@ -9,11 +9,11 @@ Devel::TypeCheck - Identify type-unsafe usage in Perl programs
 
 =head1 VERSION
 
-Version 1.01
+Version 1.2
 
 =cut
 
-our $VERSION = '1.01';
+our $VERSION = '1.2';
 
 =head1 SYNOPSIS
 

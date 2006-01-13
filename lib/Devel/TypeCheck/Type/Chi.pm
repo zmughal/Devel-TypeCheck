@@ -254,7 +254,10 @@ sub listCoerce {
 
     my $t;
     if (!$this->homogeneous) {
-	$t = $env->genChi($env->freshKappa)->bindUp($this, $env);
+	my $t0 = $env->genChi($env->freshKappa);
+	$t = $t0->subtype->bindUp($this, $env);
+
+	return undef if (!$t);
     } else {
 	$t = $this;
     }

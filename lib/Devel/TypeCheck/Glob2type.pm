@@ -40,7 +40,7 @@ sub get {
     return $this->{$glob};
 }
 
-=item B<symbols> {
+=item B<symbols>
 
 The list of all symbols tracked in this table.
 
@@ -53,6 +53,17 @@ sub symbols {
 1;
 
 =back
+
+=item B<del>
+
+Remove a glob from the global table.  Used in an ad-hoc fashion to localize *_ in functions.
+
+=cut
+sub del {
+    my ($this, $glob) = @_;
+
+    delete($this->{$glob});
+}
 
 =head1 AUTHOR
 

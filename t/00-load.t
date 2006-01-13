@@ -10,7 +10,7 @@ BEGIN {
         use_ok( "Devel::TypeCheck::$helper" );
     }
 
-    for my $type ( qw( Chi Cv Dv Eta Io Iv Kappa Mu Nu Omicron Pv Rho TRef TSub TTerm TVar Upsilon Var ) ) {
+    for my $type ( qw( Chi Dv Eta Io Iv Kappa Mu Nu Omicron Pv Rho TRef TSub TTerm TVar Upsilon Zeta Var ) ) {
         use_ok( "Devel::TypeCheck::Type::$type" );
     }
 }

@@ -32,7 +32,7 @@ our @SUBTYPES;
 our @subtypes;
 
 BEGIN {
-    @SUBTYPES = (Devel::TypeCheck::Type::H(), Devel::TypeCheck::Type::K(), Devel::TypeCheck::Type::O(), Devel::TypeCheck::Type::X(), Devel::TypeCheck::Type::CV(), Devel::TypeCheck::Type::IO());
+    @SUBTYPES = (Devel::TypeCheck::Type::H(), Devel::TypeCheck::Type::K(), Devel::TypeCheck::Type::O(), Devel::TypeCheck::Type::X(), Devel::TypeCheck::Type::Z(), Devel::TypeCheck::Type::IO());
 
     for my $i (@SUBTYPES) {
 	$subtypes[$i] = 1;

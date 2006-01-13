@@ -83,7 +83,7 @@ Return a fully qualified incomplete Eta instance
 =cut
 sub freshEta {
     my ($this) = @_;
-    return Devel::TypeCheck::Type::Mu->new(Devel::TypeCheck::Type::Eta->new($this->freshKappa, $this->genOmicron, $this->genChi));
+    return Devel::TypeCheck::Type::Mu->new(Devel::TypeCheck::Type::Eta->new($this->freshKappa, $this->genOmicron, $this->genChi, $this->freshZeta));
 }
 
 =item B<freshNu>
@@ -114,6 +114,16 @@ Return a fuly qualified incomplete Upsilon instance
 sub freshUpsilon {
     my ($this) = @_;
     return Devel::TypeCheck::Type::Mu->new(Devel::TypeCheck::Type::Kappa->new(Devel::TypeCheck::Type::Upsilon->new($this->fresh())));
+}
+
+=item B<freshZeta>
+
+Return a fully qualified incomplete Zeta instance
+
+=cut
+sub freshZeta {
+    my ($this) = @_;
+    return Devel::TypeCheck::Type::Mu->new(Devel::TypeCheck::Type::Zeta->new($this->genOmicron, $this->fresh));
 }
 
 =item B<genRho>
@@ -180,6 +190,16 @@ Generate a homogeneous Chi type with the given subtype as the homogeneous type.
 sub genChi {
     my ($this, $subtype) = @_;
     return Devel::TypeCheck::Type::Mu->new(Devel::TypeCheck::Type::Chi->new($subtype));
+}
+
+=item B<genZeta>($params, $return)
+
+Generate a Zeta type with the given params and return value.
+
+=cut
+sub genZeta {
+    my ($this, $params, $return) = @_;
+    return Devel::TypeCheck::Type::Mu->new(Devel::TypeCheck::Type::Zeta->new($params, $return));
 }
 
 # Union two types, as per union-find data structure

@@ -1,5 +1,8 @@
 Revision history for Devel-TypeCheck
 
+1.2	12 January 2006
+	Numerous bug fixes since 1.01.
+
 0.03	27 August 2005
 	Bug fixes, tests, necessary additions to the manifest, and a
 	workaround to allow checking for empty aggregate data types

@@ -46,7 +46,7 @@ our @number2name; # Mapping numbers to names for printing purposes
 our @SUBTYPES;
 our @subtypes;
 
-=item B<VAR, M, H, K, P, N, O, X, Y, CV, IO, PV, IV, DV>
+=item B<VAR, M, H, K, P, N, O, X, Y, Z, IO, PV, IV, DV>
 
 Class methods implemented through C<< AUTOLOAD >> to return a unique
 number for each different function.  This is used to represent type
@@ -57,7 +57,7 @@ for certain queries.
 # Set up the tables for AUTOLOAD, n2s, and s2n operation.
 BEGIN {
     my $count = 0;
-    @EXPORT = qw(VAR M H K P N O X Y CV IO PV IV DV);
+    @EXPORT = qw(VAR M H K P N O X Y Z IO PV IV DV);
 
     for my $i (@EXPORT) {
 	$number2name[$count] = $i;
@@ -386,6 +386,16 @@ sub derefChi {
     return $this->subtype->derefChi();
 }
 
+=item B<derefZeta>
+
+Get the CV type out of a glob type.  This is roughly equivalent to C<<*foo{CODE}>>.
+
+=cut
+sub derefZeta {
+    my ($this) = @_;
+    return $this->subtype->derefZeta();
+}
+
 =item B<listCoerce>
 
 Coerce a hash in to an array.
@@ -394,6 +404,26 @@ Coerce a hash in to an array.
 sub listCoerce {
     my ($this, $env) = @_;
     return $this->subtype->listCoerce($env);
+}
+
+=item B<derefParam>
+
+Dereference the parameter list type from a CV.
+
+=cut
+sub derefParam {
+    my ($this, $env) = @_;
+    return $this->subtype->derefParam();
+}
+
+=item B<derefReturn>
+
+Dereference the return value type from a CV.
+
+=cut
+sub derefReturn {
+    my ($this, $env) = @_;
+    return $this->subtype->derefReturn();
 }
 
 =back
