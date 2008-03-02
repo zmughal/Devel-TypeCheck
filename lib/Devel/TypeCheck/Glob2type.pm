@@ -28,6 +28,7 @@ types, for keeping track of types in a symbol table.
 Retrieve a glob from the global table.
 
 =cut
+
 sub get {
     my ($this, $glob, $env) = @_;
 
@@ -45,6 +46,7 @@ sub get {
 The list of all symbols tracked in this table.
 
 =cut
+
 sub symbols {
     my ($this) = @_;
     return keys(%$this);
@@ -52,18 +54,19 @@ sub symbols {
 
 1;
 
-=back
-
 =item B<del>
 
 Remove a glob from the global table.  Used in an ad-hoc fashion to localize *_ in functions.
 
 =cut
+
 sub del {
     my ($this, $glob) = @_;
 
     delete($this->{$glob});
 }
+
+=back
 
 =head1 AUTHOR
 
