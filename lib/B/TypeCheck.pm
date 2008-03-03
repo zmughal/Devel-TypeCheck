@@ -105,7 +105,7 @@ sub compile {
 	}
 
     }
-    
+
 	if (!($mainRoot || $all || $setModule || $setCvname)) {
 	    warn "Defaulting to -main\n";
 	    $mainRoot = TRUE;
@@ -251,11 +251,11 @@ sub typeOpChildren {
 
     # If the operator has kids, the type of the NULL op is the type of the last kid
     # Otherwise, this operator is untyped
-    
+
     my $result;
     my @returns;
     my @results;
-    
+
     if ($op->flags & B::OPf_KIDS()) {
 	for (my $kid = $op->first(); $$kid; $kid = $kid->sibling()) {
 	    # Type the kid
@@ -265,14 +265,14 @@ sub typeOpChildren {
 		push(@results, $s);
 		$result = $s;
 	    }
-    
+
 	    # Set up unify of return values from down in the tree
 	    if (defined($r)) {
 		push(@returns, $r);
 	    }
 	}
     }
-    
+
     if ($context == LIST()) {
 	$result = smash(\@results, $env);
     }
@@ -289,23 +289,23 @@ sub typeOpChildren_ {
 
     # If the operator has kids, the type of the NULL op is the type of the last kid
     # Otherwise, this operator is untyped
-    
+
     my @results;
     my @returns;
-    
+
     if ($op->flags & B::OPf_KIDS()) {
 	for (my $kid = $op->first(); $$kid; $kid = $kid->sibling()) {
 	    # Type the kid
 	    my ($s, $r) = typeOp($kid, $pad2type, $env, $cv, $context);
-	    
+
 	    # Overwrite the result
 	    push(@results, $s) if (defined($s));
-	    
+
 	    # Set up unify of return values from down in the tree
 	    push(@returns, $r) if (defined($r));
 	}
     }
-    
+
     my $result;
     if ($context == LIST()) {
 	$result = smash(\@results, $env);
@@ -326,11 +326,11 @@ sub typeOpChildrenSkip {
 
     # If the operator has kids, the type of the NULL op is the type of the last kid
     # Otherwise, this operator is untyped
-    
+
     my $result;
     my @returns;
     my @results;
-    
+
     if ($op->flags & B::OPf_KIDS()) {
 	my $start = $op->first();
 	while ($skip != 0) {
@@ -346,14 +346,14 @@ sub typeOpChildrenSkip {
 		push(@results, $s);
 		$result = $s;
 	    }
-    
+
 	    # Set up unify of return values from down in the tree
 	    if (defined($r)) {
 		push(@returns, $r);
 	    }
 	}
     }
-    
+
     if ($context == LIST()) {
 	$result = smash(\@results, $env);
     }
@@ -376,7 +376,7 @@ sub typeRest {
 
 sub typeProto {
     my ($op, $pad2type, $env, $cv, @proto) = @_;
-    
+
     my $index = 0;
     my @rets;
     if ($op->flags & B::OPf_KIDS()) {
@@ -409,7 +409,7 @@ sub typeProto {
 
 sub typeProtoOp {
     my ($op, $pad2type, $env, $cv, @proto) = @_;
-    
+
     my $index = 0;
     my @rets;
     if ($op->flags & B::OPf_KIDS()) {
@@ -804,7 +804,7 @@ sub typeOp {
 	    if (defined($realResult)) {
 		$realReturn = $realResult;
 	    }
-	}	    
+	}
 
     } elsif ($t == OP_LEAVE()) {
 	
@@ -894,7 +894,7 @@ sub typeOp {
 	
 	($realResult, $realReturn) = ($fnType->derefReturn, myUnify($env, @rets));
 	
-    } elsif ($t == OP_ENTEREVAL() || 
+    } elsif ($t == OP_ENTEREVAL() ||
 	     $t == OP_DOFILE()) {
 	
 	# Make sure we're passing it a PV
@@ -923,7 +923,7 @@ sub typeOp {
 	    myUnify($env, $pad, $t->derefHomogeneous);
 	} else {
 	    my ($t0, $r0) = typeOp($op->first()->sibling()->sibling(), $pad2type, $env, $cv, SCALAR());
-	    
+	
 	    # project the scalar for the reference
 
 	    $t0 = $t0->derefKappa();
@@ -988,7 +988,7 @@ sub typeOp {
 
     } elsif ($t == OP_RAND()) {
 	# Operand is optional
-       
+
 	my $class = B::class($op);
 
 	if ($class eq "UNOP") {
@@ -1169,7 +1169,7 @@ sub typeOp {
 	} elsif ($const eq "CODE") {
 	    ($realResult, $realReturn) = ($env->genRho($ft->derefZeta), $r);
 	} elsif ($const eq "GLOB") {
-	    # YYY I'm pretty sure a gelem(glob0) -> glob0 
+	    # YYY I'm pretty sure a gelem(glob0) -> glob0
 	    ($realResult, $realReturn) = ($env->genRho($ft), $r);
 	} else {
 	    die("Unknown *foo{THING} syntax on $const");
@@ -1404,7 +1404,7 @@ sub typeOp {
 	}
 
 	($realResult, $realReturn) = ($ary->derefIndex($elt, $env), undef);
-    
+
     } elsif ($t == OP_AELEM()) {
 	my ($ft, $fr) = typeOp($op->first(), $pad2type, $env, $cv, SCALAR());
 	my ($lt, $lr) = typeOp($op->last, $pad2type, $env, $cv, SCALAR());
@@ -1478,11 +1478,11 @@ sub typeOp {
 
 	# Resulting type is a generic KAPPA
 	($realResult, $realReturn) = ($t, undef);
-       
+
     } elsif ($t == OP_SASSIGN()) {
 	
 	if (B::class($op) ne "UNOP") {
-	    
+	
 	    # At this point the type check is flow insensitive, and we're
 	    # not doing any subtyping.  Thus, all we have to do is unify
 	    # both sides with each other.
@@ -1529,7 +1529,7 @@ sub typeOp {
     } elsif ($t == OP_SPLIT()) {
 
 	# First is always the pushre pmop, second is the string, and
-	# third is the count.  
+	# third is the count.
 	if ($context == SCALAR() &&
 	    !defined($op->first()->pmreplroot())) {
 	    warn("split in a scalar context is deprecated");
@@ -1607,7 +1607,7 @@ sub typeOp {
 		push(@rets, $r) if ($r);
 		$cur = $op->last;
 	    }
-	    
+	
 	    ($t, $r) = typeOp($cur, $pad2type, $env, $cv, SCALAR());
 	}
 
@@ -1624,7 +1624,7 @@ sub typeOp {
 
     } elsif ($t == OP_NEXTSTATE() ||
 	     $t == OP_DBSTATE() ||
-	     $t == OP_SETSTATE()) {
+	     ($] < 5.011 && $t == OP_SETSTATE())) {
 
 	# Has no effect on typing
 
@@ -2192,7 +2192,7 @@ sub typeOp {
     } elsif ($t == OP_REVERSE()) {
 
 	my ($t, $r) = typeOpChildren($op, $pad2type, $env, $cv, LIST());
-	my $list;  
+	my $list;
 
 	if ($context == SCALAR()) {
 	    $list = $env->genOmicron($PV);
@@ -2590,7 +2590,7 @@ sub typeOp {
 	    if (defined($s)) {
 		push(@results, $s);
 	    }
-    
+
 	    # Set up unify of return values from down in the tree
 	    if (defined($r)) {
 		push(@returns, $r);
@@ -2800,7 +2800,7 @@ sub callback {
 @<<<<<<<<<<<<<<<<<< @*
 $i,                 $t
 .
-    
+
     for $i (sort($glob2type->symbols)) {
         $t = myPrint($glob2type->get($i, $env), $env);
         write STDOUT;
