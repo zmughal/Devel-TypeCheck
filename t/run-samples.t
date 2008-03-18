@@ -29,7 +29,7 @@ for my $test ( sort @tests ) {
         diag $command;
     }
     else {
-        $command .= " > /dev/null 2&>1";
+        $command .= ' > '.File::Spec->devnull().' 2>&1';
     }
 
     my $exitval = system($command);
