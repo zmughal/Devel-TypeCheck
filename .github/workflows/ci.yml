@@ -105,3 +105,49 @@ jobs:
       - name: Run tests
         run:
           cpanm --verbose --test-only dist.tar.gz
+
+  test-containers:
+    needs: dist
+    runs-on: ubuntu-latest
+    container: perl:${{ matrix.perl }}
+    strategy:
+      fail-fast: false
+      matrix:
+        perl:
+          - "5.38"
+          - "5.36"
+          - "5.34"
+          - "5.32"
+          - "5.30"
+          - "5.28"
+          - "5.26"
+          - "5.24"
+          - "5.22"
+          - "5.20"
+          - "5.18"
+          - "5.16"
+          - "5.14"
+          - "5.12"
+          - "5.10"
+          - "5.8"
+    name: Perl ${{ matrix.perl }} container
+
+    steps:
+      - name: Get dist artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+
+      - run: perl -V
+
+      - name: Install Perl deps
+        run: |
+          cpanm --notest --installdeps dist.tar.gz
+
+      - name: Install develop deps
+        run: |
+          cpanm --notest --installdeps --with-develop dist.tar.gz
+
+      - name: Run tests
+        run:
+          cpanm --verbose --test-only dist.tar.gz
