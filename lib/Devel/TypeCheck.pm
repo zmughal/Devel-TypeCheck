@@ -301,7 +301,7 @@ The author has written a paper explaining the need, operation,
 results, and future direction for this project.  It is available at the
 following URL:
 
-  http://www.umiacs.umd.edu/~bargle/project2.pdf
+  https://web.archive.org/web/20060601221344/http://www.umiacs.umd.edu/~bargle/project2.pdf
 
 This is suggested reading for this release.  In future releases, we
 hope to have a proper manual.
