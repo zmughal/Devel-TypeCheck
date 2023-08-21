@@ -56,14 +56,13 @@ sub depend {
   my $CORE = File::Spec->catdir($Config{archlibexp},"CORE");
   my $stupid = File::Spec->catdir($lib,$Config{archlibexp},"CORE","opnames.ph");
   my $opnames_dep = File::Spec->catdir($CORE,"opnames.h");
-  my $h2ph = File::Spec->catdir($Config{installbin}, "h2ph");
   my $h2ph_pre = File::Spec->catdir("lib", "_h2ph_pre.ph");
   "
 $h2ph_pre : $opnames_ph
 
 $opnames_ph : $opnames_dep Makefile
 	\$(RM) $h2ph_pre
-	\$(FULLPERL) $h2ph -d lib $opnames_dep
+	\$(FULLPERL) -S h2ph -d lib $opnames_dep
 	\$(MV) $stupid lib
 	\$(RM_RF) $stupid
 
