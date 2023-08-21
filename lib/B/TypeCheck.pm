@@ -2,7 +2,6 @@ package B::TypeCheck;
 
 use strict;
 use B;
-use B::Asmdata qw(@specialsv_name);
 use Carp;
 use Scalar::Util qw(blessed);
 use English;
