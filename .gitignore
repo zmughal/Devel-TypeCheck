@@ -3,7 +3,3 @@ MYMETA.*
 Makefile
 blib/
 pm_to_blib
-
-# generated files
-lib/_h2ph_pre.ph
-lib/opnames.ph
