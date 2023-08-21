@@ -31,8 +31,6 @@ lib/Devel/TypeCheck/Type/Upsilon.pm
 lib/Devel/TypeCheck/Type/Var.pm
 lib/Devel/TypeCheck/Type/Zeta.pm
 lib/Devel/TypeCheck/Util.pm
-lib/_h2ph_pre.ph
-lib/opnames.ph
 
 t/00-load.t
 t/pod.t
